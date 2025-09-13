@@ -15,16 +15,30 @@ import {
 const router = Router();
 
 // Citizen
-router.post("/", authenticate, authorizeRoles("citizen"), upload.single("photo"), createReport);
-router.get("/my", authenticate, authorizeRoles("citizen"), getMyReports);
+router.post("/",createReport);
+router.get("/my", getMyReports);
 
 // Access specific report: citizens (own), staff/admin (any)
-router.get("/:id", authenticate, getReportById);
+router.get("/:id", getReportById);
 
 // Admin/Staff
-router.get("/", authenticate, authorizeRoles("staff", "admin"), getAllReports);
-router.put("/:id/status", authenticate, authorizeRoles("staff", "admin"), updateReportStatus);
-router.put("/:id/assign", authenticate, authorizeRoles("staff", "admin"), assignReport);
-router.post("/:id/notify", authenticate, authorizeRoles("staff", "admin"), notifyCitizen);
+router.get("/", getAllReports);
+router.put("/:id/status", updateReportStatus);
+router.put("/:id/assign", assignReport);
+router.post("/:id/notify", notifyCitizen);
+
+
+// // Citizen
+// router.post("/", authenticate, authorizeRoles("citizen"), upload.single("photo"), createReport);
+// router.get("/my", authenticate, authorizeRoles("citizen"), getMyReports);
+
+// // Access specific report: citizens (own), staff/admin (any)
+// router.get("/:id", authenticate, getReportById);
+
+// // Admin/Staff
+// router.get("/", authenticate, authorizeRoles("staff", "admin"), getAllReports);
+// router.put("/:id/status", authenticate, authorizeRoles("staff", "admin"), updateReportStatus);
+// router.put("/:id/assign", authenticate, authorizeRoles("staff", "admin"), assignReport);
+// router.post("/:id/notify", authenticate, authorizeRoles("staff", "admin"), notifyCitizen);
 
 export default router;

@@ -6,7 +6,7 @@ import { processUploadedFile } from "../utils/fileUpload";
 import { sendNotification } from "../utils/notificationService";
 
 export async function createReport(req: Request, res: Response) {
-  const userId = req.user!.id;
+  // const userId = req.user!.id;
   const { title, description, category } = req.body as {
     title: string;
     description: string;
@@ -14,53 +14,53 @@ export async function createReport(req: Request, res: Response) {
   } as any;
 
   // Parse location from JSON or multipart fields
-  const b: any = req.body || {};
-  let loc: { lat: number; lng: number } | undefined = undefined;
-  try {
-    if (typeof b.location === "string") {
-      const parsed = JSON.parse(b.location);
-      if (parsed && typeof parsed.lat === "number" && typeof parsed.lng === "number") {
-        loc = { lat: parsed.lat, lng: parsed.lng };
-      }
-    } else if (b.location && typeof b.location === "object") {
-      const lat = Number(b.location.lat);
-      const lng = Number(b.location.lng);
-      if (!Number.isNaN(lat) && !Number.isNaN(lng)) loc = { lat, lng };
-    }
-  } catch {}
-  if (!loc) {
-    const latStr = b.lat ?? b["location[lat]"] ?? b["location.lat"];
-    const lngStr = b.lng ?? b["location[lng]"] ?? b["location.lng"];
-    const lat = latStr != null ? Number(latStr) : undefined;
-    const lng = lngStr != null ? Number(lngStr) : undefined;
-    if (typeof lat === "number" && !Number.isNaN(lat) && typeof lng === "number" && !Number.isNaN(lng)) {
-      loc = { lat, lng };
-    }
-  }
+  // const b: any = req.body || {};
+  // let loc: { lat: number; lng: number } | undefined = undefined;
+  // try {
+  //   if (typeof b.location === "string") {
+  //     const parsed = JSON.parse(b.location);
+  //     if (parsed && typeof parsed.lat === "number" && typeof parsed.lng === "number") {
+  //       loc = { lat: parsed.lat, lng: parsed.lng };
+  //     }
+  //   } else if (b.location && typeof b.location === "object") {
+  //     const lat = Number(b.location.lat);
+  //     const lng = Number(b.location.lng);
+  //     if (!Number.isNaN(lat) && !Number.isNaN(lng)) loc = { lat, lng };
+  //   }
+  // } catch {}
+  // if (!loc) {
+  //   const latStr = b.lat ?? b["location[lat]"] ?? b["location.lat"];
+  //   const lngStr = b.lng ?? b["location[lng]"] ?? b["location.lng"];
+  //   const lat = latStr != null ? Number(latStr) : undefined;
+  //   const lng = lngStr != null ? Number(lngStr) : undefined;
+  //   if (typeof lat === "number" && !Number.isNaN(lat) && typeof lng === "number" && !Number.isNaN(lng)) {
+  //     loc = { lat, lng };
+  //   }
+  // }
 
   if (!title || !description || !category) return res.status(400).json({ error: "title, description, category are required" });
 
-  const localPath = (req as any).file?.path as string | undefined;
-  const photoUrl = await processUploadedFile(localPath);
+  // const localPath = (req as any).file?.path as string | undefined;
+  // const photoUrl = await processUploadedFile(localPath);
 
-  const geo = loc && typeof loc.lat === "number" && typeof loc.lng === "number"
-    ? { type: "Point" as const, coordinates: [loc.lng, loc.lat] as [number, number] }
-    : undefined;
+  // const geo = loc && typeof loc.lat === "number" && typeof loc.lng === "number"
+  //   ? { type: "Point" as const, coordinates: [loc.lng, loc.lat] as [number, number] }
+  //   : undefined;
 
-  const history = [
-    { status: "pending" as const, updatedBy: new mongoose.Types.ObjectId(userId), timestamp: new Date() },
-  ];
+  // const history = [
+  //   { status: "pending" as const, updatedBy: new mongoose.Types.ObjectId(userId), timestamp: new Date() },
+  // ];
 
   const report = await Report.create({
     title,
     description,
     category,
-    status: "pending",
-    photoUrl,
-    location: loc,
-    geo,
-    citizenId: new mongoose.Types.ObjectId(userId),
-    history,
+    // status: "pending",
+    // photoUrl,
+    // location: loc,
+    // geo,
+    // citizenId: new mongoose.Types.ObjectId(userId),
+    // history,
   });
 
   res.status(201).json(report);

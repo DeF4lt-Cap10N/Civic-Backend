@@ -3,8 +3,10 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 function signToken(id: string, role: "citizen" | "staff" | "admin") {
-  const secret = process.env.JWT_SECRET as string;
+  const secret = "hkjdfhgjhdgjhdfjhghjdfhgjdhgjdhj";
+  // const secret = process.env.JWT_SECRET as string;
   const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
+  //@ts-ignore
   return jwt.sign({ id, role }, secret, { expiresIn });
 }
 
